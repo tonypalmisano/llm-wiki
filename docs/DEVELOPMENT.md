@@ -98,6 +98,8 @@ python3 core/scripts/check_wiki.py examples/demo-vault
 python3 scripts/check_sync.py
 ```
 
+The same checks are also run by the GitHub Actions CI workflow on push and pull requests.
+
 ## Sync Checker
 
 `scripts/check_sync.py` verifies that selected vendored adapter files match their canonical files in `core/`.

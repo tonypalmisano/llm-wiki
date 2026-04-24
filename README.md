@@ -2,6 +2,10 @@
 
 > A Markdown-first workflow for building persistent, LLM-maintained knowledge bases.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/tonypalmisano/llm-wiki?include_prereleases)](https://github.com/tonypalmisano/llm-wiki/releases)
+[![CI](https://github.com/tonypalmisano/llm-wiki/actions/workflows/ci.yml/badge.svg)](https://github.com/tonypalmisano/llm-wiki/actions/workflows/ci.yml)
+
 ## What is LLM Wiki?
 
 LLM Wiki is an agent-agnostic workflow for turning raw sources into a persistent Markdown wiki maintained by LLM agents.
@@ -94,7 +98,7 @@ Planned for later versions:
 - structured claim metadata;
 - generated reports and dashboards;
 - a dedicated CLI;
-- CI checks and release automation.
+- release automation.
 
 ## Author
 
