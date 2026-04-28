@@ -75,9 +75,12 @@ LLM Wiki currently includes starter adapters for:
 
 OpenClaw is the first adapter intended for separate publication on ClawHub. `memory-wiki` remains an optional advanced OpenClaw backend, not a required dependency.
 
-For an OpenClaw workspace walkthrough, see [`docs/OPENCLAW_DEMO.md`](docs/OPENCLAW_DEMO.md).
+Adapter demo guides:
 
-For a Codex-specific walkthrough using natural prompts, see [`docs/CODEX_DEMO.md`](docs/CODEX_DEMO.md).
+- [OpenClaw demo](docs/OPENCLAW_DEMO.md)
+- [Claude Code demo](docs/CLAUDE_CODE_DEMO.md)
+- [Codex demo](docs/CODEX_DEMO.md)
+- [OpenCode demo](docs/OPENCODE_DEMO.md)
 
 ## Demo
 
