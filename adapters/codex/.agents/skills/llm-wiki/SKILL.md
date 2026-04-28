@@ -56,6 +56,29 @@ Search the wiki before answering. Use `index.md` as the routing file. Cite the w
 
 Run structural checks with `scripts/check_wiki.py` when available, then perform semantic checks manually.
 
+## Natural prompt workflows
+
+The user should not need to specify internal wiki paths for standard operations. Infer the correct locations from the LLM Wiki workflow.
+
+When the user says "ingest this source" or gives an equivalent natural prompt:
+
+1. Treat raw sources as immutable and never modify them.
+2. Create or update source pages under `wiki/sources/`.
+3. Create or update concept pages under `wiki/concepts/`.
+4. Create or update entity pages under `wiki/entities/` when useful.
+5. Create synthesis pages under `wiki/syntheses/` when the user asks to save durable answers or lasting analysis.
+6. Always update `wiki/index.md`.
+7. Always append an entry to `wiki/log.md`.
+8. Report changed files, citations used and unresolved uncertainties.
+
+Example user prompts and expected behavior:
+
+- "Ingest this source: raw/inbox/article.md" means read the raw file, create or update the relevant source/concept/entity pages, update `wiki/index.md`, append to `wiki/log.md`, and leave the raw file unchanged.
+- "Add these notes to the wiki" means identify the source material, route it into the standard wiki directories, update the index and log, and ask only if the source path is ambiguous.
+- "What does the wiki say about this topic?" means read `wiki/index.md`, inspect relevant pages, answer with wiki/source citations, and do not create a synthesis unless asked.
+- "Save that as a synthesis" means create or update a durable page under `wiki/syntheses/`, include review metadata when possible, update `wiki/index.md`, and append to `wiki/log.md`.
+- "Run a wiki check" means run the local checker when available and summarize both structural problems and review warnings.
+
 ## Rules
 
 - Treat raw sources as immutable.
