@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 draft
+
+- Added lightweight human review signals for synthesis pages.
+- Added review metadata fields to synthesis templates.
+- Checker now reports review warnings separately from structural errors.
+
 ## 0.2.1
 
 - Aligned the wiki checker with the vault schema: special control files may omit frontmatter, and wikilinks inside fenced code blocks are ignored.

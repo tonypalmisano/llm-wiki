@@ -87,15 +87,17 @@ python3 core/scripts/check_wiki.py examples/demo-vault
 
 ## Status
 
-Version: 0.2.1 draft  
+Version: 0.3.0 draft  
 Scope: multi-agent starter package
+
+Human review signals for synthesis pages are in progress: the checker can now surface review warnings without treating them as structural failures.
 
 ## Roadmap
 
 Planned for later versions:
 
 - richer OpenClaw memory-wiki integration;
-- structured claim metadata;
+- expanded structured claim metadata;
 - generated reports and dashboards;
 - a dedicated CLI;
 - release automation.

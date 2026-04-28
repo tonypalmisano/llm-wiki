@@ -100,6 +100,16 @@ python3 scripts/check_sync.py
 
 The same checks are also run by the GitHub Actions CI workflow on push and pull requests.
 
+## Structural Checks And Review Signals
+
+`core/scripts/check_wiki.py` separates structural problems from epistemic review signals.
+
+Structural problems include missing required files, missing frontmatter on content pages, broken wikilinks and orphan content pages. These problems fail the check with exit code 1.
+
+Review signals are non-failing warnings for synthesis pages. They surface pages that may deserve human review, such as pages with missing review metadata, empty source references, unsupported claims, missing evidence or limitation sections, or `review_status: needs_review`.
+
+The checker does not certify truth, completeness or correctness. It only highlights synthesis pages that need closer human attention.
+
 ## Sync Checker
 
 `scripts/check_sync.py` verifies that selected vendored adapter files match their canonical files in `core/`.

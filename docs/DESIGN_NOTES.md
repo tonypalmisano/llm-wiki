@@ -14,6 +14,14 @@ Adapter packages may contain vendored copies of core templates or scripts so eac
 
 OpenClaw memory-wiki is useful and should be supported as an advanced backend, but LLM Wiki should also work as plain Markdown.
 
+## Review signals, not truth certification
+
+LLM Wiki should help humans notice which synthesis pages deserve review, but it should not claim to certify truth.
+
+Structural health checks validate repository and vault hygiene. Epistemic review signals are softer warnings attached to synthesis pages, such as missing source references, unsupported claims, contradictions, low confidence or `review_status: needs_review`.
+
+These signals are intentionally Markdown-first and dependency-free. They are designed to route human attention, not to replace human judgment.
+
 ## Publication strategy
 
 - Publish the GitHub repository as multi-agent.
