@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 draft
+
+- Added documentation for optional PDF ingestion with OpenDataLoader PDF.
+- Documented the `raw/converted/` convention for derived PDF artifacts.
+- Documented how page/bounding-box metadata can support claim source references.
+
 ## 0.4.0 draft
 
 - Added structured claim metadata for synthesis pages.

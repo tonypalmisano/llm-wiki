@@ -198,3 +198,4 @@ ClawHub currently publishes submitted skills under MIT-0. If the OpenClaw adapte
 
 - `docs/DESIGN_NOTES.md`
 - `docs/MIGRATION_FROM_V0_1.md`
+- `docs/OPENDATALOADER_PDF.md`

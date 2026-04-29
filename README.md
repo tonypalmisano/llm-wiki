@@ -101,6 +101,8 @@ Adapter demo guides:
 - [Codex demo](docs/CODEX_DEMO.md)
 - [OpenCode demo](docs/OPENCODE_DEMO.md)
 
+Optional PDF ingestion: [`docs/OPENDATALOADER_PDF.md`](docs/OPENDATALOADER_PDF.md)
+
 ## Demo
 
 A minimal demo vault is included in [`examples/demo-vault/`](examples/demo-vault/).
@@ -113,7 +115,7 @@ python3 core/scripts/check_wiki.py examples/demo-vault
 
 ## Status
 
-Version: 0.4.0 draft  
+Version: 0.4.1 draft  
 Scope: multi-agent starter package with adapter demo workflows, human review signals and structured claim metadata
 
 Human review signals for synthesis pages are implemented as non-blocking
