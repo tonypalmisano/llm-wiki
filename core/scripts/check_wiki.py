@@ -104,6 +104,67 @@ def has_heading(text: str, heading: str) -> bool:
     pattern = rf"^##\s+{re.escape(heading)}\s*$"
     return re.search(pattern, text, flags=re.MULTILINE) is not None
 
+def extract_section(text: str, heading: str) -> str:
+    lines = text.splitlines()
+    start = None
+
+    for index, line in enumerate(lines):
+        if re.match(rf"^##\s+{re.escape(heading)}\s*$", line):
+            start = index + 1
+            break
+
+    if start is None:
+        return ""
+
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if re.match(r"^##\s+", lines[index]):
+            end = index
+            break
+
+    return "\n".join(lines[start:end])
+
+def split_table_row(line: str):
+    stripped = line.strip()
+    if not stripped.startswith("|") or not stripped.endswith("|"):
+        return []
+    return [cell.strip() for cell in stripped.strip("|").split("|")]
+
+def is_separator_row(cells) -> bool:
+    if not cells:
+        return False
+    return all(re.fullmatch(r":?-{3,}:?", cell.strip()) for cell in cells)
+
+def normalize_header(value: str) -> str:
+    return clean_scalar(value).lower().replace(" ", "_")
+
+def parse_claim_rows(text: str):
+    section = extract_section(text, "Claims")
+    if not section:
+        return []
+
+    table_lines = [line for line in section.splitlines() if line.strip().startswith("|")]
+    if len(table_lines) < 2:
+        return []
+
+    headers = [normalize_header(cell) for cell in split_table_row(table_lines[0])]
+    separator = split_table_row(table_lines[1])
+    if not headers or not is_separator_row(separator):
+        return []
+
+    rows = []
+    for line in table_lines[2:]:
+        cells = split_table_row(line)
+        if len(cells) != len(headers):
+            continue
+        rows.append(dict(zip(headers, cells)))
+
+    return rows
+
+def is_empty_or_placeholder(value: str) -> bool:
+    normalized = clean_scalar(value).lower()
+    return normalized in {"", "[]", "todo", "todo.", "placeholder", "n/a", "none"}
+
 def collect_synthesis_review_warnings(path: Path, text: str):
     data, list_items = parse_frontmatter(text)
     if clean_scalar(data.get("type", "")) != "synthesis":
@@ -126,6 +187,74 @@ def collect_synthesis_review_warnings(path: Path, text: str):
     unsupported_claims = int_frontmatter_value(data, "unsupported_claims")
     if unsupported_claims > 0:
         warnings.append(prefix + f"unsupported_claims is {unsupported_claims}")
+
+    low_confidence_claims = int_frontmatter_value(data, "low_confidence_claims")
+    if low_confidence_claims > 0:
+        warnings.append(prefix + f"low_confidence_claims is {low_confidence_claims}")
+
+    if "claim_count" not in data:
+        warnings.append(prefix + "claim_count is missing")
+
+    claim_rows = parse_claim_rows(text)
+    if not has_heading(text, "Claims"):
+        warnings.append(prefix + "missing ## Claims section")
+    elif "claim_count" in data:
+        claim_count = int_frontmatter_value(data, "claim_count")
+        if claim_count != len(claim_rows):
+            warnings.append(
+                prefix + f"claim_count is {claim_count}, but {len(claim_rows)} claim rows were found"
+            )
+
+    unsupported_rows = 0
+    low_confidence_rows = 0
+
+    for index, row in enumerate(claim_rows, start=1):
+        claim_id = clean_scalar(row.get("id", ""))
+        row_label = claim_id or f"row {index}"
+
+        claim = clean_scalar(row.get("claim", ""))
+        source_refs = clean_scalar(row.get("source_refs", ""))
+        support_status = clean_scalar(row.get("support_status", "")).lower()
+        confidence = clean_scalar(row.get("confidence", "")).lower()
+        review_status = clean_scalar(row.get("review_status", "")).lower()
+
+        if not claim_id:
+            warnings.append(prefix + f"claim {row_label} is missing ID")
+        if is_empty_or_placeholder(claim):
+            warnings.append(prefix + f"claim {row_label} is missing Claim")
+        if "source_refs" not in row:
+            warnings.append(prefix + f"claim {row_label} is missing Source refs")
+        elif is_empty_or_placeholder(source_refs):
+            warnings.append(prefix + f"claim {row_label} has empty/TODO/placeholder Source refs")
+
+        if not support_status:
+            warnings.append(prefix + f"claim {row_label} is missing Support status")
+        elif support_status in {"unsupported", "contradicted", "unclear"}:
+            warnings.append(prefix + f"claim {row_label} support status is {support_status}")
+
+        if support_status == "unsupported":
+            unsupported_rows += 1
+
+        if not confidence:
+            warnings.append(prefix + f"claim {row_label} is missing Confidence")
+        elif confidence == "low":
+            warnings.append(prefix + f"claim {row_label} confidence is low")
+            low_confidence_rows += 1
+
+        if not review_status:
+            warnings.append(prefix + f"claim {row_label} is missing Review status")
+        elif review_status in {"needs_review", "revisit"}:
+            warnings.append(prefix + f"claim {row_label} review status is {review_status}")
+
+    if unsupported_claims != unsupported_rows:
+        warnings.append(
+            prefix + f"unsupported_claims is {unsupported_claims}, but {unsupported_rows} unsupported claim rows were found"
+        )
+
+    if low_confidence_claims != low_confidence_rows:
+        warnings.append(
+            prefix + f"low_confidence_claims is {low_confidence_claims}, but {low_confidence_rows} low-confidence claim rows were found"
+        )
 
     if not has_heading(text, "Evidence base"):
         warnings.append(prefix + "missing ## Evidence base section")

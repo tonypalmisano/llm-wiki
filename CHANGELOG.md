@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 draft
+
+- Added structured claim metadata for synthesis pages.
+- Added a claim table to the synthesis template.
+- Checker now reports claim-level review warnings.
+
 ## 0.3.0 draft
 
 - Added lightweight human review signals for synthesis pages.

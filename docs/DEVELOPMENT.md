@@ -110,6 +110,45 @@ Review signals are non-failing warnings for synthesis pages. They surface pages 
 
 The checker does not certify truth, completeness or correctness. It only highlights synthesis pages that need closer human attention.
 
+## Structured Claim Metadata
+
+Synthesis pages use two levels of review metadata:
+
+- page-level metadata in frontmatter;
+- claim-level metadata in a readable Markdown `## Claims` table.
+
+Page-level metadata summarizes the synthesis as a whole:
+
+```yaml
+review_status: needs_review
+confidence: medium
+source_refs: []
+claim_count: 0
+reviewed_claims: 0
+unsupported_claims: 0
+low_confidence_claims: 0
+contradictions: []
+```
+
+Claim-level metadata belongs in the `## Claims` table:
+
+```md
+| ID | Claim | Type | Source refs | Support status | Confidence | Review status |
+|---|---|---|---|---|---|---|
+| C1 | TODO | factual | [[sources/example-source]] | supported | medium | needs_review |
+```
+
+Allowed values:
+
+- Type: `factual`, `interpretive`, `recommendation`, `definition`, `open_question`
+- Support status: `supported`, `partial`, `unsupported`, `contradicted`, `unclear`
+- Confidence: `low`, `medium`, `high`
+- Review status: `needs_review`, `reviewed`, `revisit`
+
+The checker reports claim-level review warnings for missing fields, unsupported or contradicted claims, low-confidence claims, review-needed claims, and mismatches between page-level summary counts and claim rows.
+
+These warnings surface epistemic risk and human review candidates. They do not certify truth and they do not fail CI in this version.
+
 ## Sync Checker
 
 `scripts/check_sync.py` verifies that selected vendored adapter files match their canonical files in `core/`.

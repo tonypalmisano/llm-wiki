@@ -22,6 +22,14 @@ Structural health checks validate repository and vault hygiene. Epistemic review
 
 These signals are intentionally Markdown-first and dependency-free. They are designed to route human attention, not to replace human judgment.
 
+## Structured claim metadata
+
+Structured claim metadata should remain readable in plain Markdown. The page-level frontmatter summarizes review state for the whole synthesis, while the `## Claims` table records claim-level metadata.
+
+The table format is intentionally simple: claim ID, claim text, type, source refs, support status, confidence and review status. This keeps the workflow usable in GitHub, Obsidian and ordinary text editors without requiring a database, embeddings or JSON export.
+
+The checker may compare page-level counts such as `claim_count`, `unsupported_claims` and `low_confidence_claims` against parseable claim rows, but mismatches are review warnings only. The goal is to surface epistemic risk and candidates for human review, not to certify truth.
+
 ## Publication strategy
 
 - Publish the GitHub repository as multi-agent.
