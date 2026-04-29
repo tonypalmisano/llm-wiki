@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.2 draft
+
+- Prepared OpenClaw adapter documentation for future ClawHub publication.
+- Added package-level README for the OpenClaw skill.
+- Added ClawHub publishing notes.
+- Added OpenClaw memory-wiki backend notes.
+
 ## 0.4.1 draft
 
 - Added documentation for optional PDF ingestion with OpenDataLoader PDF.

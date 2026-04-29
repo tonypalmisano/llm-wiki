@@ -94,6 +94,11 @@ OpenClaw is the first adapter intended for separate publication on ClawHub.
 `memory-wiki` remains an optional advanced OpenClaw backend, not a required
 dependency.
 
+ClawHub publishing notes: [`docs/CLAW_HUB_PUBLISHING.md`](docs/CLAW_HUB_PUBLISHING.md)
+
+OpenClaw memory-wiki backend notes:
+[`docs/OPENCLAW_MEMORY_WIKI.md`](docs/OPENCLAW_MEMORY_WIKI.md)
+
 Adapter demo guides:
 
 - [OpenClaw demo](docs/OPENCLAW_DEMO.md)
@@ -115,7 +120,7 @@ python3 core/scripts/check_wiki.py examples/demo-vault
 
 ## Status
 
-Version: 0.4.1 draft  
+Version: 0.4.2 draft  
 Scope: multi-agent starter package with adapter demo workflows, human review signals and structured claim metadata
 
 Human review signals for synthesis pages are implemented as non-blocking

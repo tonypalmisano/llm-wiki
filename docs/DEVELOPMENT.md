@@ -173,6 +173,8 @@ The script is intentionally dependency-free and only reports drift. It does not 
 ## OpenClaw And ClawHub
 
 OpenClaw is the first adapter intended for separate publication on ClawHub.
+The candidate package is `adapters/openclaw/skills/llm_wiki`.
+memory-wiki remains optional and adapter-local; plain Markdown fallback remains default.
 
 For ClawHub publication, keep the local folder as:
 
@@ -196,6 +198,8 @@ ClawHub currently publishes submitted skills under MIT-0. If the OpenClaw adapte
 
 ## Related Documents
 
+- `docs/CLAW_HUB_PUBLISHING.md`
 - `docs/DESIGN_NOTES.md`
 - `docs/MIGRATION_FROM_V0_1.md`
+- `docs/OPENCLAW_MEMORY_WIKI.md`
 - `docs/OPENDATALOADER_PDF.md`

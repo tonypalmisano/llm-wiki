@@ -1,50 +1,48 @@
 ---
 name: llm_wiki
-description: Maintain a Markdown-first LLM Wiki knowledge base from immutable raw sources. Use for /llm_wiki init, ingest, query, lint, compile, and for persistent wiki maintenance workflows. If OpenClaw memory-wiki is available, prefer it as an advanced backend; otherwise operate directly on Markdown files.
-version: 0.2.1
+description: Maintain a Markdown-first LLM Wiki knowledge base from immutable raw sources. Use for /llm_wiki init, ingest, query, synthesis saving, lint/check, compile and persistent wiki maintenance. Plain Markdown fallback is the default; OpenClaw memory-wiki is optional when available.
+version: 0.4.2
 homepage: https://github.com/tonypalmisano/llm-wiki
 license: MIT-0
 ---
 
 # LLM Wiki Skill for OpenClaw
 
-You are maintaining a persistent, compounding Markdown knowledge base.
+LLM Wiki is a Markdown-first workflow for building a persistent, compounding
+knowledge base with LLM agents.
 
-## When to use
+The skill turns raw source material into maintained Markdown pages under
+`wiki/`, keeps an index and log, preserves uncertainty, and can save durable
+answers as synthesis pages.
+
+## Supported Operations
 
 Use this skill when the user asks to:
 
 - initialize an LLM Wiki vault;
-- ingest a document into a wiki;
-- update entity, concept, source or synthesis pages;
-- answer a question from the wiki;
-- save an answer back into the wiki;
+- ingest a source into the wiki;
+- create or update source, concept, entity, question or synthesis pages;
+- query the wiki and answer from existing pages;
+- save a durable answer as a synthesis;
 - lint or health-check a wiki;
-- prepare the wiki for Obsidian or Git.
+- compile or refresh derived wiki pages.
 
-## Backend selection
+## Backend Modes
 
-Before acting, determine the available backend.
+Always disclose the backend before performing a meaningful operation.
 
-### Preferred backend: OpenClaw memory-wiki
+### Plain Markdown fallback
 
-If `openclaw wiki status` or equivalent tooling is available and the user wants OpenClaw-native behavior, use the memory-wiki backend when appropriate.
+Default mode:
 
-Useful commands may include:
-
-```bash
-openclaw wiki init
-openclaw wiki status
-openclaw wiki ingest <path-or-url>
-openclaw wiki compile
-openclaw wiki lint
-openclaw wiki search <query>
-openclaw wiki get <page>
+```text
+Backend: plain Markdown fallback
 ```
 
-### Fallback backend: plain Markdown
+Use this mode when OpenClaw memory-wiki is unavailable, the user asks for a
+portable Markdown vault, or the OpenClaw-native backend is ambiguous.
 
-If memory-wiki is not available, operate directly on files:
+Operate directly on files:
 
 ```text
 raw/
@@ -64,31 +62,84 @@ wiki/
   questions/
 ```
 
+### Optional OpenClaw memory-wiki backend
+
+Optional advanced mode:
+
+```text
+Backend: OpenClaw memory-wiki
+```
+
+OpenClaw memory-wiki is not required. Use it only when it is available and the
+user wants OpenClaw-native behavior.
+
+Useful commands may include:
+
+```bash
+openclaw wiki status
+openclaw wiki init
+openclaw wiki ingest <path-or-url>
+openclaw wiki compile
+openclaw wiki lint
+openclaw wiki search <query>
+openclaw wiki get <page>
+```
+
+If a memory-wiki command is unavailable, fails, or does not preserve the LLM Wiki
+contract, fall back to plain Markdown mode and report that choice.
+
+### Hybrid compatibility mode
+
+Use hybrid mode when memory-wiki helps with backend/search/compile behavior but
+the visible LLM Wiki vault still needs Markdown interoperability.
+
+In hybrid mode:
+
+- use memory-wiki only for operations it cleanly supports;
+- keep `wiki/index.md` and `wiki/log.md` understandable;
+- preserve LLM Wiki page conventions and review metadata;
+- report changed files or pages after each operation.
+
 ## Commands
 
 ### `/llm_wiki init [path]`
 
-Create the vault structure. Copy templates if available. Do not overwrite existing files without asking or creating a backup.
+Create the vault structure. Copy templates when available. Do not overwrite
+existing files without asking or creating a backup.
 
 ### `/llm_wiki ingest <source-path>`
 
 1. Read the source.
-2. Create or update a source page under `wiki/sources/`.
-3. Extract entities, concepts, claims and contradictions.
-4. Update relevant entity and concept pages.
-5. Update `wiki/index.md`.
-6. Append to `wiki/log.md`.
-7. Report changed files.
+2. Treat raw sources as immutable.
+3. Create or update a source page under `wiki/sources/`.
+4. Extract entities, concepts, claims and contradictions.
+5. Create or update concept pages under `wiki/concepts/`.
+6. Create or update entity pages under `wiki/entities/` when useful.
+7. Update `wiki/index.md`.
+8. Append to `wiki/log.md`.
+9. Report changed files, backend used and unresolved uncertainties.
 
 ### `/llm_wiki query <question>`
 
-1. Read `wiki/index.md`.
+1. Read `wiki/index.md` or use memory-wiki search when in memory-wiki mode.
 2. Locate relevant wiki pages.
 3. Read source pages when evidence is needed.
 4. Answer with citations to wiki/source pages.
-5. If the answer is durable, ask whether to save it as a synthesis page unless the user already requested saving.
+5. Preserve uncertainty when evidence is incomplete.
+6. If the answer is durable, ask whether to save it as a synthesis unless the
+   user already requested saving.
 
-### `/llm_wiki lint`
+### Save synthesis
+
+When the user asks to save a durable answer:
+
+1. Create or update a synthesis page under `wiki/syntheses/`.
+2. Include review metadata and claim metadata when possible.
+3. Update `wiki/index.md`.
+4. Append to `wiki/log.md`.
+5. Report review warnings or unsupported claims clearly.
+
+### `/llm_wiki lint` or `/llm_wiki check`
 
 Check for:
 
@@ -98,19 +149,26 @@ Check for:
 - contradictions;
 - missing source references;
 - pages missing frontmatter;
-- index/log inconsistency.
+- index/log inconsistency;
+- synthesis review warnings.
 
-Use `scripts/check_wiki.py` if available, but also reason semantically about the wiki.
+Use `scripts/check_wiki.py` if available, but also reason semantically about the
+wiki.
 
 ### `/llm_wiki compile`
 
-Refresh derived pages such as index, dashboards, topic maps, and summary tables.
+Refresh derived pages such as index, dashboards, topic maps and summary tables.
 
-## Strict rules
+## Safety Rules
 
 - Never modify raw sources.
-- Never invent citations.
-- Preserve uncertainty.
+- Never invent citations, source details or evidence.
+- Preserve uncertainty and contradictions.
 - Prefer small, reviewable edits.
 - Log every meaningful operation.
-- If a new source contradicts an old claim, mark the contradiction rather than silently overwriting it.
+- Do not execute remote code.
+- Do not install dependencies automatically.
+- Do not make memory-wiki a requirement.
+- Do not duplicate memory-wiki internals.
+- If a new source contradicts an old claim, mark the contradiction rather than
+  silently overwriting it.
