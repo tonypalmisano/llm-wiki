@@ -23,11 +23,19 @@ Then start or restart OpenClaw so the workspace skill is discovered.
 ## Example Commands
 
 ```text
-/llm_wiki init .
+/llm_wiki init
+/llm_wiki init --dry-run
 /llm_wiki ingest raw/inbox/example.md
 /llm_wiki query Why is LLM Wiki different from temporary retrieval?
 /llm_wiki lint
 ```
+
+`/llm_wiki init` initializes the current OpenClaw workspace automatically. It is
+non-destructive, creates only missing directories and files, and does not
+overwrite existing files. Use `/llm_wiki init --dry-run` to preview changes
+before writing them.
+
+No separate `/llm_wiki_init` command is needed.
 
 Durable answers can also be saved as synthesis pages:
 

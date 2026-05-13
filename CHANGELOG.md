@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.3 draft
+
+- Added deterministic OpenClaw init helper.
+- Made `/llm_wiki init` autonomous and non-destructive.
+- Added dry-run support for OpenClaw init.
+- Fixed OpenClaw init/checker mismatch by ensuring `wiki/AGENTS.md` is created during initialization.
+- Reduced reliance on planner filesystem tool orchestration.
+
 ## 0.4.2 draft
 
 - Prepared OpenClaw adapter documentation for future ClawHub publication.

@@ -43,7 +43,13 @@ If OpenClaw provides a skills list command in your version, use it to verify tha
 Use the slash command:
 
 ```text
-/llm_wiki init .
+/llm_wiki init
+```
+
+To preview the initialization without writing files:
+
+```text
+/llm_wiki init --dry-run
 ```
 
 Expected result:
@@ -64,6 +70,21 @@ wiki/
   concepts/
   syntheses/
   questions/
+```
+
+Explicit paths are advanced fallback only. In normal OpenClaw use, the init
+command detects the current workspace automatically.
+
+Verify the initialized vault:
+
+```bash
+python3 skills/llm_wiki/scripts/check_wiki.py .
+```
+
+Expected:
+
+```text
+LLM Wiki health check: OK
 ```
 
 ## 5. Add an example source
