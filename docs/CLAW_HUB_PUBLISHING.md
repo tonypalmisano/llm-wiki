@@ -56,6 +56,11 @@ Verify:
 Run local repository checks:
 
 ```bash
+python3 adapters/openclaw/skills/llm_wiki/scripts/init_wiki.py --dry-run /tmp/llm-wiki-openclaw-test
+rm -rf /tmp/llm-wiki-openclaw-test
+python3 adapters/openclaw/skills/llm_wiki/scripts/init_wiki.py /tmp/llm-wiki-openclaw-test
+test -f /tmp/llm-wiki-openclaw-test/wiki/AGENTS.md && echo "wiki/AGENTS.md created"
+python3 adapters/openclaw/skills/llm_wiki/scripts/check_wiki.py /tmp/llm-wiki-openclaw-test
 python3 core/scripts/check_wiki.py examples/demo-vault
 python3 scripts/check_sync.py
 ```

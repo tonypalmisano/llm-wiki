@@ -1,7 +1,7 @@
 ---
 name: llm_wiki
 description: Maintain a Markdown-first LLM Wiki knowledge base from immutable raw sources. Use for /llm_wiki init, ingest, query, synthesis saving, lint/check, compile and persistent wiki maintenance. Plain Markdown fallback is the default; OpenClaw memory-wiki is optional when available.
-version: 0.4.2
+version: 0.4.3
 homepage: https://github.com/tonypalmisano/llm-wiki
 license: MIT-0
 ---
@@ -104,8 +104,32 @@ In hybrid mode:
 
 ### `/llm_wiki init [path]`
 
-Create the vault structure. Copy templates when available. Do not overwrite
-existing files without asking or creating a backup.
+Initialize the vault structure in plain Markdown fallback mode.
+
+For init, prefer the deterministic helper script instead of manual filesystem
+tool orchestration:
+
+```bash
+python3 skills/llm_wiki/scripts/init_wiki.py
+```
+
+`/llm_wiki init` should run the helper with no path so it can automatically
+detect the OpenClaw workspace. `/llm_wiki init --dry-run` should run:
+
+```bash
+python3 skills/llm_wiki/scripts/init_wiki.py --dry-run
+```
+
+Only use manual filesystem operations if the helper is unavailable. When manual
+fallback is necessary, create missing directories and files only, copy templates
+when available, and never overwrite existing files.
+
+For OpenClaw slash-command mode:
+
+- do not call `read()` on directories;
+- do not use `node:auto`;
+- do not ask the user for internal OpenClaw paths unless automatic workspace
+  detection fails.
 
 ### `/llm_wiki ingest <source-path>`
 
